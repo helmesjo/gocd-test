@@ -1,11 +1,11 @@
-project("hellocmake" CXX)
+find_package(cpplocate REQUIRED)
+
+project(${MAIN_PROJECT_NAME}_tests CXX)
 
 # ---------------	METADATA
 
 set(META_PROJECT_NAME ${PROJECT_NAME})
 set(META_PROJECT_NAMESPACE ${META_PROJECT_NAME})
-set(META_PROJECT_VERSION_MAJOR 0)
-set(META_PROJECT_VERSION_MINOR 1)
 set(META_BINARY_NAME ${META_PROJECT_NAME})
 set(META_BINARY_PATH ${CMAKE_BINARY_DIR})
 
@@ -17,11 +17,9 @@ source_group(Resources FILES ${resources})
 
 # ---------------	BUILD
 
-add_library(${PROJECT_NAME} 
-	STATIC 
-	${sources} 
-	${resources}
-)
+add_executable(${PROJECT_NAME} ${sources} ${resources})
+# Set as startup project
+set_property(DIRECTORY ${CMAKE_SOURCE_DIR} PROPERTY VS_STARTUP_PROJECT ${PROJECT_NAME})
 # On build, copy resource-files to output folder
 add_custom_command(TARGET ${PROJECT_NAME} 
 	POST_BUILD
@@ -46,8 +44,22 @@ configure_file(
 target_include_directories(${PROJECT_NAME}
 	PRIVATE
 	${PROJECT_BINARY_DIR}/config
+	${MAIN_PROJECT_DIR}
+	${CATCH_INCLUDE_DIR}
+	${FAKEIT_INCLUDE_DIR}
+	${COMMON_INCLUDES}
 )
 
-	
-set(MAIN_PROJECT_NAME ${PROJECT_NAME} PARENT_SCOPE)
-set(MAIN_PROJECT_DIR ${PROJECT_SOURCE_DIR} PARENT_SCOPE)
+# ---------------	LINKING
+
+add_dependencies(${PROJECT_NAME} 
+	catch
+	fakeit
+)
+target_link_libraries(${PROJECT_NAME}
+	PRIVATE
+	${MAIN_PROJECT_NAME}
+	cpplocate
+)
+
+add_test(NAME ${PROJECT_NAME} COMMAND ${PROJECT_NAME})

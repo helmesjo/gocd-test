@@ -25,25 +25,5 @@ matrix:
             - clang-3.6
       env: COMPILER=clang++-3.6
 
-env:
-    global:
-        # The next declaration is the encrypted COVERITY_SCAN_TOKEN, created
-        #   via the "travis encrypt" command using the project repo's public key
-        - secure: "MyKBiAItVEeIXudnErLo52Iva60A/T2LYU59bZm9TAmVvfp9IEG7T7wVVLybnsrEPc3iCNqwUeeZeCAX2Ukd3be6mmkkJ8YP0N2wCui53ohLeWlBcoUwAkfd/a3KLGrq+TWzmd6hQfI3AF9lfI72k9+6f7A5T6DxabFUECYZNnarh9zzi/JMhNGHi3eQoQUszjPcxqI6GGcadIMFXFRMkQGzJ7L/8aESqM5KOegqxxKeTeCRadKROR8QhPHoFkvhl3iBll1idJe33RBQhGbs5h7nFtiSyndE1XIRCjXlMc8ejsVIT2vsQoxufS2jSifoN4vh3SaVmoGiEqIgOTp6fo88Xt5Um8KW7bQcsYsTNmLiGmhBaOQizmBKxkQZrDT7GWnQBMW8EXNzUMTFbEuKWjgGNH9hDPLNmdMtMy5DdySvY1hDIbOpRPutNKQSns/80IT6pjgMZ/jFA7CCYoINhU9BNfq462RhPqjnzeOvQ2TrgfxZxAx1YHzuMnHFYx7OEijEM7szkWwsA2eeWmo1QXE+GN+AlQ1C/cUrjP+b5vwzUKd96Y5aRh7lFfBbH2khyqpyQxhIsDCg/svhMxL49SmjfyogufUflZc+MlySuDHnmC/2SoGKL639KHFWz3WosBUvaJ5058PrXX2bg/shvdufqOBnIWsz6tTqVC+ZpDU="
-
-before_install:
-    - echo -n | openssl s_client -connect scan.coverity.com:443 | sed -ne '/-BEGIN CERTIFICATE-/,/-END CERTIFICATE-/p' | sudo tee -a /etc/ssl/certs/ca-
-
-addons:
-    coverity_scan:
-        project:
-        name: "helmesjo/hello-ci"
-        description: "Build submitted via Travis CI"
-        notification_email: helmesjo@live.com
-        build_command_prepend: 
-            - mkdir build
-            - cd build
-            - cmake ..
-        build_command: 
-            - make
-        branch_pattern: coverity_scan
+script:
+  - bash ./build.sh

@@ -4,12 +4,6 @@ environment:
       VS_VERSION: Visual Studio 14
 
 build_script:
-  - md build
-  - cd build
-  - cmake ..
-  - msbuild .\Solution.sln /p:Configuration=Release
-  
-test_script:
-  - ctest -C Release
+  - sh ./build.sh
 
 deploy: off
