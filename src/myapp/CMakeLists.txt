@@ -1,5 +1,7 @@
 project(myapp VERSION 0.1 LANGUAGES CXX)
 
+find_package(mylib REQUIRED)
+
 add_executable(${PROJECT_NAME}
     src/main.cpp
 )
